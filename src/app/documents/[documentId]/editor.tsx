@@ -24,10 +24,12 @@ import { Ruler } from "./ruler";
 import { useLiveblocksExtension } from "@liveblocks/react-tiptap";
 import { Threads } from "@/app/documents/[documentId]/threads";
 import { useStorage } from "@liveblocks/react";
+import { StorageShape } from "@/lib/config";
 
 interface EditorProps {
   initialContent?: string | undefined;
 }
+
 
 export const Editor = ({ initialContent }: EditorProps) => {
   const { setEditor } = useEditorStore();
@@ -35,8 +37,10 @@ export const Editor = ({ initialContent }: EditorProps) => {
     initialContent,
     offlineSupport_experimental: true,
   });
-  const leftMargin = useStorage((root) => root.leftMargin);
-  const rightMargin = useStorage((root) => root.rightMargin);
+
+
+  const leftMargin = useStorage<StorageShape>((root) => root.leftMargin);
+  const rightMargin = useStorage<StorageShape>((root) => root.rightMargin);
 
   const editor = useEditor({
     immediatelyRender: false,
