@@ -5,11 +5,11 @@ import { auth } from "@clerk/nextjs/server";
 import { api } from "../../../../convex/_generated/api";
 
 interface DocumentIdPageProps {
-  params: { documentId: Id<"documents"> }; // Directly typing params with `documentId`
+  params: { documentId: Id<"documents"> };
 }
 
 const DocumentIdPage = async ({ params }: DocumentIdPageProps) => {
-  const { documentId } = params; // Directly destructuring
+  const { documentId } = params;
 
   const { getToken } = await auth();
   const token = (await getToken({ template: "convex" })) ?? undefined;
@@ -19,11 +19,6 @@ const DocumentIdPage = async ({ params }: DocumentIdPageProps) => {
     throw Error("Unauthorized");
   }
 
-  console.log("Loading Document ... ");
-  console.log("Document ID:", documentId);
-  console.log("Token:", token);
-
-  // Preloading the document using the documentId
   const preloadedDocument = await preloadQuery(
     api.documents.getById,
     { id: documentId },
@@ -32,7 +27,7 @@ const DocumentIdPage = async ({ params }: DocumentIdPageProps) => {
 
   if (!preloadedDocument) {
     console.error("Document not found:", documentId);
-    return <div>Document not found</div>; // Return UI instead of crashing
+    return <div>Document not found</div>;
   }
 
   return <Document preloadedDocument={preloadedDocument} />;
