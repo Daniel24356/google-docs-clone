@@ -1,13 +1,11 @@
 import { Id } from "../../../../convex/_generated/dataModel";
 import { Document } from "@/app/documents/[documentId]/document";
-
 import { preloadQuery } from "convex/nextjs";
 import { auth } from "@clerk/nextjs/server";
-
 import { api } from "../../../../convex/_generated/api";
 
 interface DocumentIdPageProps {
-  params: { documentId: Id<"documents"> }; // Removed Promise<>
+  params: { documentId: Id<"documents"> }; // Directly typing params with `documentId`
 }
 
 const DocumentIdPage = async ({ params }: DocumentIdPageProps) => {
@@ -25,6 +23,7 @@ const DocumentIdPage = async ({ params }: DocumentIdPageProps) => {
   console.log("Document ID:", documentId);
   console.log("Token:", token);
 
+  // Preloading the document using the documentId
   const preloadedDocument = await preloadQuery(
     api.documents.getById,
     { id: documentId },

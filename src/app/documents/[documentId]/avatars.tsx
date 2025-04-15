@@ -1,6 +1,7 @@
 import { useOthers, useSelf } from "@liveblocks/react/suspense";
 import { ClientSideSuspense } from "@liveblocks/react";
 import { Separator } from "@/components/ui/separator";
+import Image from 'next/image';
 
 const AVATAR_SIZE = 36;
 
@@ -12,9 +13,16 @@ export const Avatars = () => {
   );
 };
 
+type UserInfo = {
+  avatar: string;
+  name: string;
+};
+
 const AvatarStack = () => {
-  const users = useOthers();
-  const currentUser = useSelf();
+  const users = useOthers((others) => others.map((user) => user.info as UserInfo));
+
+  // Select current user's info
+  const currentUser = useSelf((me) => me.info as UserInfo);
 
   if (users.length === 0) {
     return null;
@@ -25,13 +33,13 @@ const AvatarStack = () => {
       <div className="flex items-center">
         {currentUser && (
           <div className="relative ml-2">
-            <Avatar src={currentUser.info.avatar} name="You" />
+            <Avatar src={currentUser.avatar} name="You" />
           </div>
         )}
         <div className="flex">
-          {users.map(({ connectionId, info }) => (
-            <Avatar key={connectionId} src={info.avatar} name={info.name} />
-          ))}
+        {users.map((user, idx) => (
+    <Avatar key={idx} src={user.avatar} name={user.name} />
+  ))}
         </div>
       </div>
       <Separator orientation="vertical" className="h-6" />
@@ -53,7 +61,13 @@ const Avatar = ({ src, name }: AvatarProps) => {
       <div className="opacity-0 group-hover:opacity-100 absolute top-full py-1 px-2 text-white text-xs rounded-lg mt-2.5 z-10 bg-black whitespace-nowrap transition-opacity">
         {name}
       </div>
-      <img src={src} alt={name} className="size-full rounded-full" />
+      <Image 
+        src={src} 
+        alt={name} 
+        width={AVATAR_SIZE} 
+        height={AVATAR_SIZE} 
+        className="rounded-full" 
+      />
     </div>
   );
 };
