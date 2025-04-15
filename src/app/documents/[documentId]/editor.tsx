@@ -39,8 +39,8 @@ export const Editor = ({ initialContent }: EditorProps) => {
   });
 
 
-  const leftMargin = useStorage<StorageShape>((root) => root.leftMargin);
-  const rightMargin = useStorage<StorageShape>((root) => root.rightMargin);
+  const leftMargin = useStorage((root) => (root as StorageShape).leftMargin);
+  const rightMargin = useStorage((root) => (root as StorageShape).rightMargin);
 
   const editor = useEditor({
     immediatelyRender: false,

@@ -1,17 +1,36 @@
 import React, { useRef, useState } from "react";
 import { FaCaretDown } from "react-icons/fa";
 import { useStorage, useMutation } from "@liveblocks/react";
+// import { StorageShape } from "@/lib/config";
 const markers = Array.from({ length: 83 }, (_, i) => i);
 
+interface StorageShape {
+  leftMargin: number;
+  rightMargin: number;
+}
+
+interface LiveObject<T> {
+  set<K extends keyof T>(key: K, value: T[K]): void;
+  // ...other methods
+}
+
 export const Ruler = () => {
-  const leftMargin = useStorage((root) => root.leftMargin) ?? 56;
-  const setLeftMargin = useMutation(({ storage }, position: number) => {
-    storage.set("leftMargin", position);
-  }, []);
-  const rightMargin = useStorage((root) => root.rightMargin) ?? 56;
-  const setRightMargin = useMutation(({ storage }, position: number) => {
-    storage.set("rightMargin", position);
-  }, []);
+ const leftMargin = useStorage((root) => (root as StorageShape).leftMargin) ?? 56;
+ const setLeftMargin = useMutation(
+  ({ storage }, position: number) => {
+    // Cast storage to LiveObject<StorageShape>
+    (storage as unknown as LiveObject<StorageShape>).set("leftMargin", position);
+  },
+  []
+);
+  const rightMargin = useStorage((root) => (root as StorageShape).rightMargin) ?? 56;
+  const setRightMargin = useMutation(
+    ({ storage }, position: number) => {
+      // Cast storage to LiveObject<StorageShape>
+      (storage as unknown as LiveObject<StorageShape>).set("rightMargin", position);
+    },
+    []
+  );
 
   const [isDraggingLeft, setIsDraggingLeft] = useState(false);
   const [isDraggingRight, setIsDraggingRight] = useState(false);
