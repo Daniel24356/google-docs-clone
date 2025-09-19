@@ -1,8 +1,8 @@
-// import React from 'react'
+import React from 'react'
 
-// const Page = () => {
-//     return (
-//         <div>DocumentsPage</div>
-//     )
-// }
-// export default Page
+const Page = () => {
+    return (
+        <div>DocumentsPage</div>
+    )
+}
+export default Page
